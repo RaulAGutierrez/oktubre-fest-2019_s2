@@ -1,0 +1,69 @@
+import personas.*
+import cervezas.*
+
+describe "personas y cervezas" {
+	
+	// declaracion de paises
+	const mexico = new Pais( nombre = "Mexico", gentilicio = "mexicano")
+	const alemania = new Pais( nombre = "Alemania", gentilicio = "aleman")
+	const irlanda = new Pais( nombre = "Irlanda", gentilicio = "irlandes")
+	const belgica = new Pais( nombre = "Belgica", gentilicio = "belga")
+	const argentina = new Pais( nombre = "Argentina", gentilicio = "Argentino") 
+	
+	// declaracion de marcas
+	const corona = new Rubia( pais = mexico, lupulo = 1.2, graduacion = 0.045)
+	const quilmes = new Rubia( pais = argentina, lupulo = 2, graduacion = 0.035)
+	const hofbrau = new Rubia( pais = alemania, lupulo = 2, graduacion = 0.08)
+	const guiness = new Negra( pais = irlanda, lupulo = 5, graduacionMundial = graduacionReglamentaria)
+	const patagonia = new Roja( pais = argentina, lupulo = 4, graduacionMundial = graduacionReglamentaria)
+	const santafe = new Rubia( pais = argentina, lupulo = 5, graduacion = 2)
+	
+	// declaracion de jarras
+	const jarra1 = new Jarras( marca = corona, litros = 1)
+	const jarra2 = new Jarras( marca = quilmes, litros = 2)
+	const jarra3 = new Jarras( marca = hofbrau, litros = 2)
+	const jarra4 = new Jarras( marca = guiness, litros = 2)
+	const jarra5 = new Jarras( marca = patagonia, litros = 2)
+	const jarra6 = new Jarras( marca = santafe, litros = 2)
+	
+	// declaracion persona
+	const juan = new Persona(peso = 80, escuchaMusicaTradicional = true, nivelAguante = 15, paisOrigen = argentina)
+	const gunter = new Aleman(peso = 88, escuchaMusicaTradicional = true, nivelAguante = 50, paisOrigen = alemania )
+	
+	// declaracion parte 1
+	const jarraParte1 = new Jarras(marca = hofbrau, litros = 0.5 )
+	
+	fixture {
+		graduacionReglamentaria.nivel(0.043)
+		// compra jarras
+		juan.comprar(jarraParte1)
+		juan.comprar(jarra2)
+		juan.comprar(jarra3)
+		gunter.comprar(jarra1)
+		gunter.comprar(jarraParte1)
+		// consumen jarras
+		juan.consumir(jarraParte1)
+		juan.consumir(jarra3)
+		gunter.consumir(jarraParte1)
+		gunter.consumir(jarra1)
+	}
+	
+	test "parte 1" {
+		// 1.- requerimiento
+		assert.equals(0.04, jarraParte1.cantidadAlcohol())
+		assert.equals(0.16, jarra3.cantidadAlcohol())
+		// 2.- requerimiento
+		assert.equals(0.2, juan.litrosAlcoholConsumidos())
+		assert.equals(0.085, gunter.litrosAlcoholConsumidos())	
+		// 3.- requerimiento
+		assert.that(juan.estaEbrio())
+		assert.notThat(gunter.estaEbrio())
+		// 4.- requerimiento
+		assert.notThat(juan.leGusta(hofbrau))
+		assert.that(gunter.leGusta(corona))
+	}
+	
+	
+	//assert.that(true)
+
+}
